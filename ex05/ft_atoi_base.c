@@ -1,0 +1,188 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jcongolo <jcongolo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/19 19:52:35 by jcongolo          #+#    #+#             */
+/*   Updated: 2025/07/19 20:58:07 by jcongolo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+/*
+    ft_atoi_base - Converte uma string em um número inteiro, considerando uma base personalizada.
+    Parâmetros:
+        str  → string contendo o número
+        base → string com os símbolos válidos da base (ex: "0123456789ABCDEF")
+    Comportamento:
+        - Ignora espaços no início da string
+        - Lê sinais '+' e '-' para definir a polaridade
+        - Valida a base:
+            - Precisa ter ≥ 2 caracteres únicos
+            - Não pode conter '+' ou '-' ou espaços invisíveis
+            - Não pode ter caracteres duplicados
+        - Para cada caractere válido, acumula seu valor conforme a base
+        - Retorna o número inteiro convertido
+        - Se a base for inválida, retorna 0
+*/
+int ft_is_valid_base(char *base)
+{
+    int i;
+    int j;
+
+    // Verificar se base tem pelo menos dois símbolos válidos
+    if (!base || !base[0] || !base[1])
+    {
+        return(0);
+    }
+    i = 0;
+    while (base[i])
+    {
+        // Base não pode conter sinais ou espaços
+        if (base[i] == '+' || base[i] == '-' || (base[i] >= 9 && base[i] <= 13) || base[i] == ' ')
+        {
+            return(0);
+        }
+        // Verificar duplicatas na base
+        j = i + 1;
+        while (base[j])
+        {
+            if (base[j] == base[i])
+            {
+                return(0);
+            }
+            j++;
+        }
+        i++;
+    }
+    return(1);
+}
+
+/*
+    ft_get_index - Retorna o índice de um caractere dentro de uma base fornecida.
+    Parâmetros:
+        c     → caractere a ser procurado
+        base  → string representando os símbolos da base (ex: "0123456789ABCDEF")
+    Comportamento:
+        - Percorre a string base do início ao fim
+        - Se o caractere c for encontrado na base, retorna seu índice (posição)
+        - Se c não existir na base, retorna -1
+        - Usado para determinar o valor numérico de um símbolo da base durante conversão
+    Exemplo:
+        ft_get_index('A', "0123456789ABCDEF") → retorna 10
+        ft_get_index('9', "0123456789")       → retorna 9
+        ft_get_index('Z', "0123456789ABCDEF") → retorna -1 (caractere não encontrado)
+*/
+int ft_get_index(char c, char *base)
+{
+    int i;
+
+    i = 0;
+    while (base[i])
+    {
+        if (base[i] == c)
+        {
+            return(i);
+        }
+        i++;
+    }
+    return(-1);
+}
+
+/*
+    ft_atoi_base - Converte uma string para inteiro com base personalizada.
+    Parâmetros:
+        str  → string que representa o número (pode conter espaços e sinais)
+        base → string com os símbolos válidos da base (ex: "0123456789ABCDEF")
+    Comportamento:
+        - Ignora espaços iniciais da string
+        - Interpreta sinais '+' e '-' no início
+        - Valida a base:
+            - Deve conter pelo menos dois caracteres distintos
+            - Não pode conter '+' ou '-' ou espaços/brancos invisíveis
+            - Não pode conter caracteres duplicados
+        - Constrói o número acumulando os valores conforme os índices na base
+        - Para quando encontra um caractere que não existe na base
+        - Retorna 0 se a base for inválida ou não houver dígitos válidos
+    Funções autorizadas:
+        - Nenhuma
+*/
+int ft_atoi_base(char *str, char *base)
+{
+    int     i;
+    int     sig;
+    int     base_len;
+    int     dig;
+    long    nbr;
+
+    // Validar a base fornecida
+    if (!ft_is_valid_base(base))
+    {
+        return(0);
+    }
+    
+    // Calcular o tamanho da base
+    base_len = 0;
+    while (base[base_len])
+    {
+        base_len++;
+    }
+    
+    // Ignorar espaços no início da string
+    i = 0;
+    while (str[i] >= 9 && str[i] <= 13 || str[i] == ' ')
+    {
+        i++;
+    }
+    
+    // Lê os sinais '+' e '-'
+    sig = 1;
+    while (str[i] == '+' || str[i] == '-')
+    {
+        if (str[i] == '-')
+        {
+            sig *= -1; 
+        }
+        i++;
+    }
+    
+    //Construir número com base nos caracteres válidos
+    dig = ft_get_index(str[i], base);
+    nbr = 0;
+    while ( dig != -1)
+    {
+        nbr = nbr * base_len + dig; // acumula valor do número
+        i++;                        // avança para próximo caractere
+        dig = ft_get_index(str[i], base);// atualiza com novo caractere
+    }
+
+    return(sig * nbr);
+}
+
+/*
+    #include <stdio.h>
+    int main(void)
+    {
+        // Teste com base decimal
+        printf("Decimal: %d\n", ft_atoi_base("   -42", "0123456789"));
+
+        // Teste com binário
+        printf("Binário: %d\n", ft_atoi_base("101010", "01")); // → 42
+
+        // Teste com hexadecimal
+        printf("Hexa:    %d\n", ft_atoi_base("1A", "0123456789ABCDEF")); // → 26
+
+        // Teste com base personalizada ("poneyvif")
+        printf("Poney:   %d\n", ft_atoi_base("vif", "poneyvif")); // → 75
+
+        // Teste com sinais misturados
+        printf("Sinais:  %d\n", ft_atoi_base(" --+-2F", "0123456789ABCDEF")); // → -47
+
+        // Base inválida
+        printf("Inválido: %d\n", ft_atoi_base("123", "0")); // → 0
+
+        return 0;
+    }
+
+*/

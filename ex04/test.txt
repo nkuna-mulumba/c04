@@ -1,0 +1,22 @@
+APONTAMENTO SOBRE "ft_putnbr_base"
+
+Exemplo de bases válidas
+"01" → binária
+
+"0123456789" → decimal
+
+"0123456789abcdef" → hexadecimal
+
+"poneyvif" → octal estilizada
+
+
+
+
+
+BASE	                    String usada	            Descrição
+Binária	                    "01"    	                2 símbolos: 0 e 1
+Ternária	                "012"	                    Base 3
+Octal personalizada	        "poneyvif"	                Base 8 com símbolo fofo 🐎
+Decimal	                    "0123456789"	            Base 10
+Hexadecimal tradicional	    "0123456789ABCDEF"	        Base 16
+Qualquer base exótica	    "abcxyz" ou "🏀🐍🚀"	    Desde que tenha ≥2 e seja válida
