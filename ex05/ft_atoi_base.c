@@ -31,24 +31,31 @@ int ft_is_valid_base(char *base)
     int i;
     int j;
 
-    // Verificar se base tem pelo menos dois símbolos válidos
-    if (!base || !base[0] || !base[1])
+    //Verificar se base tem pelo menos dois símbolos válidos
+    i = 0;
+    if (!base || !base[i] || !base[i + 1])
     {
         return(0);
     }
-    i = 0;
+
+    //Se base tiver sinais de '+' e '-', retona 0
     while (base[i])
     {
-        // Base não pode conter sinais ou espaços
         if (base[i] == '+' || base[i] == '-' || (base[i] >= 9 && base[i] <= 13) || base[i] == ' ')
         {
             return(0);
         }
-        // Verificar duplicatas na base
+        i++;
+    }
+
+    // Verificar duplicatas na base
+    i = 0;
+    while(base[i])
+    {
         j = i + 1;
-        while (base[j])
+        while(base[j])
         {
-            if (base[j] == base[i])
+            if(base[j] == base[i])
             {
                 return(0);
             }
@@ -91,6 +98,39 @@ int ft_get_index(char c, char *base)
 }
 
 /*
+    ft_prepare_number_start - Analisa o início de uma string numérica
+    Parâmetros:
+        str → string contendo o número
+        sig → ponteiro para sinal (positivo ou negativo)
+    Comportamento:
+        - Ignora espaços e caracteres invisíveis no início da string
+        - Interpreta os sinais '+' e '-' acumulados (como em ft_atoi)
+        - Atualiza o sinal via ponteiro (1 ou -1)
+        - Retorna o índice onde começa a parte numérica válida da string
+*/
+int ft_prepare_number_start(char *str, int *sig)
+{
+    int i;
+
+    i = 0;
+    while((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+    {
+        i++;
+    }
+
+    *sig = 1;
+    while(str[i] == '+' || str[i] == '-')
+    {
+        if(str[i] == '-')
+        {
+            *sig *= -1;
+        }
+        i++;
+    }
+    return(i);
+}
+
+/*
     ft_atoi_base - Converte uma string para inteiro com base personalizada.
     Parâmetros:
         str  → string que representa o número (pode conter espaços e sinais)
@@ -108,13 +148,14 @@ int ft_get_index(char c, char *base)
     Funções autorizadas:
         - Nenhuma
 */
+
 int ft_atoi_base(char *str, char *base)
 {
-    int     i;
-    int     sig;
-    int     base_len;
-    int     dig;
-    long    nbr;
+    int i;
+    int sig;
+    int base_len;
+    int dig;
+    int nbr;
 
     // Validar a base fornecida
     if (!ft_is_valid_base(base))
@@ -129,32 +170,16 @@ int ft_atoi_base(char *str, char *base)
         base_len++;
     }
     
-    // Ignorar espaços no início da string
-    i = 0;
-    while (str[i] >= 9 && str[i] <= 13 || str[i] == ' ')
-    {
-        i++;
-    }
-    
-    // Lê os sinais '+' e '-'
-    sig = 1;
-    while (str[i] == '+' || str[i] == '-')
-    {
-        if (str[i] == '-')
-        {
-            sig *= -1; 
-        }
-        i++;
-    }
-    
+    // Retornar numero valido
+    i = ft_prepare_number_start(str, &sig);
+        
     //Construir número com base nos caracteres válidos
-    dig = ft_get_index(str[i], base);
     nbr = 0;
-    while ( dig != -1)
+    while (str[i] && ft_get_index(base, str[i]) != -1)
     {
-        nbr = nbr * base_len + dig; // acumula valor do número
-        i++;                        // avança para próximo caractere
-        dig = ft_get_index(str[i], base);// atualiza com novo caractere
+        dig = ft_get_index(str[i], base);//
+        nbr = nbr * base_len + dig; //Acumula valor do número
+        i++;
     }
 
     return(sig * nbr);

@@ -34,24 +34,31 @@ int ft_is_valid_base(char *base)
     int i;
     int j;
 
-    // Base vazia ou de tamanho 1
-    if (!base || !base[0] || !base[1])
+    //Base vazia ou de tamanho 1
+    i = 0;
+    if (!base || !base[i] || !base[i + 1])
     {
         return(0);
     }
-    i = 0;
+
+    //Verifica + ou -
     while (base[i])
     {
-        // Verifica + ou -
         if (base[i] == '+' || base[i] == '-')
         {
             return(0);
         }
-        // Verifica duplicatas
+        i++;
+    }
+
+    //Verifica duplicatas
+    i = 0;
+    while(base[i])
+    {
         j = i + 1;
         while (base[j])
         {
-            if (base[i] == base[j])
+            if (base[j] == base[i])
             {
                 return(0);
             }
@@ -85,31 +92,34 @@ void    ft_putnbr_base(int nbr, char *base)
 {
     long    num;
     int     base_len;
-    
-    // Validar base
+    char    c;
+    //Validar base
     if (!ft_is_valid_base(base))
     {
         return;
     }
+
     num = nbr;
     if (num < 0)
     {
         write(1, "-", 1);
         num = -num;
     }
-    // Calcular tamanho da base
+    
+    //Calcular tamanho da base
     base_len = 0;
     while (base[base_len])
     {
         base_len++;
     }
-    // Recursão
+    
+    //Recursão
     if (num >= base_len)
     {
         ft_putnbr_base(num / base_len, base);
     }
 
-    char    c = base[num % base_len];//01
+    c = base[num % base_len];
     write(1, &c, 1);
 }
 
@@ -139,5 +149,4 @@ int main(void)
 
     return 0;
 }
-
 */

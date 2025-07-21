@@ -25,17 +25,17 @@
 
 int ft_atoi(char *str)
 {
-    int     i;
-    int     sig;
-    long    nbr;
+    int i;
+    int sig;
+    int nbr;
     
-    // Ignorar espaços
+    //Ignorar espaços
     i = 0;
     while ((str[i] >= 9 && str[i] <= 13) || (str[i] == ' '))
     {
         i++;
     }
-    // Processar sinais múltiplos
+    //Processar sinais múltiplos
     sig = 1;
     while (str[i] == '+' || str[i] == '-')
     {
@@ -45,7 +45,7 @@ int ft_atoi(char *str)
         }
         i++;
     }
-    // Construir o número
+    //Construir o número
     nbr = 0;
     while (str[i] >= '0' && str[i] <= '9')
     {
