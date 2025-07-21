@@ -81,7 +81,7 @@ int ft_is_valid_base(char *base)
         ft_get_index('9', "0123456789")       → retorna 9
         ft_get_index('Z', "0123456789ABCDEF") → retorna -1 (caractere não encontrado)
 */
-int ft_get_index(char c, char *base)
+int ft_get_index(char *base, char c)
 {
     int i;
 
@@ -177,11 +177,10 @@ int ft_atoi_base(char *str, char *base)
     nbr = 0;
     while (str[i] && ft_get_index(base, str[i]) != -1)
     {
-        dig = ft_get_index(str[i], base);//
+        dig = ft_get_index(base, str[i]);
         nbr = nbr * base_len + dig; //Acumula valor do número
         i++;
     }
-
     return(sig * nbr);
 }
 
@@ -193,6 +192,7 @@ int ft_atoi_base(char *str, char *base)
         printf("Decimal: %d\n", ft_atoi_base("   -42", "0123456789"));
 
         // Teste com binário
+        printf("Decimal: %d\n", ft_atoi_base("ab", "ba")); //2
         printf("Binário: %d\n", ft_atoi_base("101010", "01")); // → 42
 
         // Teste com hexadecimal
@@ -209,5 +209,4 @@ int ft_atoi_base(char *str, char *base)
 
         return 0;
     }
-
 */
