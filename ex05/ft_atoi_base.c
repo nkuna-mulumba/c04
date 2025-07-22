@@ -150,11 +150,11 @@ int ft_prepare_number_start(char *str, int *sig)
 
 int ft_atoi_base(char *str, char *base)
 {
+    int base_len;
     int i;
     int sig;
-    int base_len;
-    int dig;
     int nbr;
+    int dig;
 
     // Validar a base fornecida
     if (!ft_is_valid_base(base))
