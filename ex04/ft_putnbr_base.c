@@ -11,22 +11,19 @@
 /* ************************************************************************** */
 
 /*
-    ft_putnbr_base - Imprime um número inteiro no terminal em uma base personalizada.
-    Parâmetros:
-        nbr  → número inteiro a ser impresso
-        base → string que representa os símbolos da base (ex: "0123456789ABCDEF")
+    ft_is_valid_base - Verifica se base personalizada é válida
+    Parâmetro:
+        base → string contendo os símbolos da base (ex: "0123456789ABCDEF")
     Comportamento:
-        - Valida a base antes de qualquer conversão:
-            - Base deve ter pelo menos dois caracteres
-            - Não pode conter '+' ou '-'
-            - Não pode conter caracteres duplicados
-        - Imprime o número em sua representação na base fornecida
-        - Utiliza recursão para garantir que os dígitos sejam impressos na ordem correta
-        - Trata números negativos imprimindo '-' antes da conversão
-        - Não imprime nada se a base for inválida
-    Funções autorizadas:
-        - Apenas write
+        - Retorna 0 se:
+            - A base for nula ou tiver menos de dois caracteres
+            - Contiver símbolos '+' ou '-'
+            - Contiver caracteres repetidos
+        - Retorna 1 se a base for válida
+    Utilização:
+        - Usada por ft_putnbr_base para garantir que a conversão ocorra corretamente
 */
+
 #include <unistd.h>
 
 int ft_is_valid_base(char *base)
@@ -90,13 +87,20 @@ int ft_is_valid_base(char *base)
 
 void    ft_putnbr_base(int nbr, char *base)
 {
-    long    num;
     int     base_len;
+    long    num;
     char    c;
     //Validar base
     if (!ft_is_valid_base(base))
     {
         return;
+    }
+
+    //Calcular tamanho da base
+    base_len = 0;
+    while (base[base_len])
+    {
+        base_len++;
     }
 
     num = nbr;
@@ -105,14 +109,7 @@ void    ft_putnbr_base(int nbr, char *base)
         write(1, "-", 1);
         num = -num;
     }
-    
-    //Calcular tamanho da base
-    base_len = 0;
-    while (base[base_len])
-    {
-        base_len++;
-    }
-    
+        
     //Recursão
     if (num >= base_len)
     {

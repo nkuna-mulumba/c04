@@ -11,21 +11,20 @@
 /* ************************************************************************** */
 
 /*
-    ft_atoi_base - Converte uma string em um número inteiro, considerando uma base personalizada.
-    Parâmetros:
-        str  → string contendo o número
-        base → string com os símbolos válidos da base (ex: "0123456789ABCDEF")
+    ft_is_valid_base - Verifica se uma base personalizada é válida para conversão
+    Parâmetro:
+        base → string contendo os símbolos da base (ex: "0123456789ABCDEF")
     Comportamento:
-        - Ignora espaços no início da string
-        - Lê sinais '+' e '-' para definir a polaridade
-        - Valida a base:
-            - Precisa ter ≥ 2 caracteres únicos
-            - Não pode conter '+' ou '-' ou espaços invisíveis
-            - Não pode ter caracteres duplicados
-        - Para cada caractere válido, acumula seu valor conforme a base
-        - Retorna o número inteiro convertido
-        - Se a base for inválida, retorna 0
+        - Retorna 0 se:
+            - A base for nula ou tiver menos de dois caracteres
+            - Contiver símbolos '+' ou '-'
+            - Contiver espaços ou caracteres invisíveis (ASCII 9 a 13)
+            - Contiver caracteres duplicados
+        - Retorna 1 se a base for válida
+    Utilização:
+        - Usada por ft_atoi_base para garantir que a conversão numérica ocorra corretamente
 */
+
 int ft_is_valid_base(char *base)
 {
     int i;
