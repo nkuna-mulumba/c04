@@ -28,8 +28,8 @@
 
 void    ft_putnbr(int nb)
 {
-    char    c;
     long    num;
+    char    c;
 
     num = nb;
     if (num == -2147483648)
